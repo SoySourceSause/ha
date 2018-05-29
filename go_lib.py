@@ -147,7 +147,7 @@ class go_lib:
         
         
 k = go_lib()
-k.login("jyhong","jean6940")
+k.login("아이디","비밀번호")
 time.sleep(2)
 k.clicking()
 time.sleep(10)
