@@ -8,8 +8,8 @@ import re
 ##############################################
 THING_TO_SEARCH = '環境'
 PATH_TO_CHROME_DRIVER = "D:\\coldreason\\dev\\selenium-sung\\chromedriver.exe"
-ID = 'jyhong'
-PWD = 'jean6940'
+ID = 'id'
+PWD = 'pw'
 OUT_PUT_FILE_NAME = 'output6.csv'
 PERIOD_START = '2017-01-01'
 PERIOD_END = '2017-12-31'
