@@ -6,10 +6,10 @@ import time
 import csv
 import re
 ##############################################
-THING_TO_SEARCH = '環境'
+THING_TO_SEARCH = '空气污染'
 PATH_TO_CHROME_DRIVER = "D:\\coldreason\\dev\\selenium-sung\\chromedriver.exe"
-ID = 'id'
-PWD = 'pw'
+ID = 'jyhong'
+PWD = 'jean6940'
 OUT_PUT_FILE_NAME = 'output6.csv'
 PERIOD_START = '2017-01-01'
 PERIOD_END = '2017-12-31'
@@ -36,7 +36,6 @@ while True:
 		time.sleep(0.1)
 		pass
 driver.find_element_by_name("pass").send_keys(PWD,Keys.RETURN)
-print('login finished')
 while True:
 	try:
 		driver.switch_to_frame("header")	
@@ -65,7 +64,6 @@ while True:
 	except:
 		time.sleep(0.1)
 		pass
-print('login finished')
 while True:
 	try:
 		driver.find_elements_by_css_selector("""input[type='radio'][value='en-zh_CN']""")[0].click()
@@ -74,7 +72,6 @@ while True:
 		time.sleep(0.1)
 		pass
 driver.execute_script('''changeSetting("ChangeLangForm");''')
-print('login finished')
 while True:
 	try:
 		driver.switch_to_frame("ws5-content")
@@ -82,7 +79,6 @@ while True:
 	except:
 		time.sleep(0.1)
 		pass
-print('login finished')
 while True:
 	try:
 		driver.find_element_by_xpath("//div[@id='landing_keyword']/input[@type='text']").send_keys(THING_TO_SEARCH)#大氣汚染
@@ -97,7 +93,6 @@ driver.find_element_by_xpath("//input[@id='datepicker2']").send_keys(PERIOD_END)
 driver.find_element_by_xpath("//input[@id='regionSelectAll']").click()
 driver.find_element_by_xpath("//input[@id='cn']").click()
 driver.find_element_by_xpath("//div[@id='view_media_list']/a").click()
-print('login finished')
 
 while True:
 	try:
@@ -144,18 +139,17 @@ num_ex = re.compile('[0-9]+')
 f = open(OUT_PUT_FILE_NAME, 'w', encoding='utf-8', newline='')
 wr = csv.writer(f)
 time.sleep(4)
-print('login finished')
 while True:
 	source = driver.page_source
 	soup = BeautifulSoup(source,'html.parser')
-	pages = soup.findAll('li', attrs={'class':'pages_links'})
-	if pages != []:
+	last_page = soup.findAll('li', attrs={'id':'pages_input'})
+	if last_page != []:
 		break
 	else:
 		print('page not loaded please restart')
 		time.sleep(0.1)
-page = 1
-for pg in pages:
+last_page = int(num_ex.findall(last_page[0].contents[-1].contents[0])[0])
+for pg in range(2,last_page+2):
 	window_before = driver.window_handles[0]
 	while True:
 		source = driver.page_source
@@ -169,7 +163,6 @@ for pg in pages:
 	samp_word = soup.findAll('div', attrs={'class':'results_words notranslate'})
 	samp_link = soup.findAll('div',attrs={'class':'results_type'})
 	cnt = 0
-	page = page+1
 	for i in samp_title:
 		title = str(samp_title[cnt].contents[1].contents[0].contents[0])
 		date = str(samp_date[cnt].contents[0])
@@ -190,7 +183,6 @@ for pg in pages:
 					break
 				else :
 					time.sleep(0.2)
-			print(title_n)
 			title = contentadvisor(title_n[0],'')
 			driver.switch_to_window(window_before)
 			while True:
@@ -210,8 +202,10 @@ for pg in pages:
 		wr.writerow([date,'',resource,'',section,'',words,'',title,'',stringd])
 		cnt = cnt+1
 	
-	if(pg != pages[-1]):
-		scrp = "SubmitWithRewriteURL('" + str(page) + "');" 
+	if(pg != last_page+1):
+		scrp = "SubmitWithRewriteURL('" + str(pg) + "');" 
 		driver.execute_script(scrp)
 		time.sleep(4)
+	msg = str(pg-1) +'/'+ str(last_page) + ' done'
+	print(msg)
 f.close()
