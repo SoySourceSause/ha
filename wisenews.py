@@ -26,15 +26,6 @@ def contentadvisor(webcontent,outputstring):
 			outputstring = outputstring + webcontent			
 	return outputstring
 
-# chrome_options = Options()
-# chrome_options.add_argument("--headless")
-# chrome_options.add_argument("--window-size=1920x1080")
-
-# options = webdriver.ChromeOptions()
-# options.add_argument('headless')
-# options.add_argument('window-size=1920x1080')
-# chrome_options.add_argument("disable-gpu")
-# driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=PATH_TO_CHROME_DRIVER)
 driver = webdriver.Chrome(PATH_TO_CHROME_DRIVER)# 웹 드라이버 path
 driver.get('https://login.lib.ezproxy.ust.hk/login?url=http://libwisenews.wisers.net/?gid=HKUST&user=ipaccess&pwd=ipaccess')
 while True:
